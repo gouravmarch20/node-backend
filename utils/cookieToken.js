@@ -1,3 +1,6 @@
+// res.cookie --> in postman , frontend brower --> auto save
+// res.json ==> response form frontend developer to do their logic 
+
 const cookieToken = (user, res) => {
     const token = user.getJwtToken();
 

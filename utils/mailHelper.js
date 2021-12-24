@@ -1,5 +1,7 @@
 const nodemailer = require("nodemailer");
+// nodemailer --> mail testing
 
+//FIXME: ONLY WORKING ON NODEMAILER not on user.email 
 const mailHelper = async (option) => {
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,

@@ -25,6 +25,7 @@ app.use(
 //morgan middleware
 app.use(morgan("tiny"));
 const user = require("./routes/user");
+// const product = require("./routes/product");
 
 
 app.get('/', (req, res) => {
@@ -33,6 +34,7 @@ app.get('/', (req, res) => {
 
 
 //router middleware
-app.use("/api/v1", user);
+// app.use("/api/v1", user);
+// app.use("/api/v1", product);
 // export app js
 module.exports = app

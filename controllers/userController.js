@@ -3,7 +3,7 @@ const BigPromise = require("../middlewares/bigPromise");
 const CustomError = require("../utils/coustomError");
 const cookieToken = require("../utils/cookieToken");
 const cloudinary = require("cloudinary");
-const mailHelper = require("../utils/emailHelper");
+const mailHelper = require("../utils/mailHelper");
 const crypto = require("crypto");
 
 exports.signup = BigPromise(async (req, res, next) => {
@@ -136,7 +136,7 @@ exports.forgotPassword = BigPromise(async (req, res, next) => {
     }
 });
 
-exports.passwordReset = BigPromise(async (req, res, next) => {
+exports.resetPassword = BigPromise(async (req, res, next) => {
     //get token from params
     const token = req.params.token;
 
@@ -186,7 +186,7 @@ exports.getLoggedInUserDetails = BigPromise(async (req, res, next) => {
     });
 });
 
-exports.changePassword = BigPromise(async (req, res, next) => {
+exports.updatePassword = BigPromise(async (req, res, next) => {
     // get user from middleware
     const userId = req.user.id;
 
@@ -288,7 +288,7 @@ exports.admingetOneUser = BigPromise(async (req, res, next) => {
     });
 });
 
-exports.adminUpdateOneUserDetails = BigPromise(async (req, res, next) => {
+exports.adminUpdateOneUser = BigPromise(async (req, res, next) => {
     // add a check for email and name in body
 
     const { name } = req.body

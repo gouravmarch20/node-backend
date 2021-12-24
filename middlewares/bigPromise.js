@@ -1,5 +1,15 @@
-// try catch  async-await  ||| async - await  with promise  promise
-//  using promise + async await way 
+// try catch  async-await  || async - await  with promise  -->  using promise to handle async await  
 
 module.exports = (func) => (req, res, next) =>
     Promise.resolve(func(req, res, next)).catch(next);
+
+    // ? FIXME: TESTING PENDING
+
+// TRADITIONAL WAY MORE SIMPPLIFY
+
+// module.exports = function (func) {
+    // ! func ==> real function passing by CONTROLLERS  
+//     return function (req, res, next) {
+//         Promise.resolve(func(req, res, next)).catch(next);//! func can acess the req, res , next => LEXICAL SCOPING 
+//     }
+// }
