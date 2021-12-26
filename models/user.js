@@ -64,7 +64,7 @@ userSchema.methods.getJwtToken = function () {
   });
 };
 
-//generate forgot password token (string)
+//generate forgot password token (string)  --> store hashed string , return unhased string / url
 userSchema.methods.getForgotPasswordToken = function () {
   // generate a long and randomg string
   const forgotToken = crypto.randomBytes(20).toString("hex");

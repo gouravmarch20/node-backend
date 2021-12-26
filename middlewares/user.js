@@ -25,10 +25,13 @@ exports.isLoggedIn = BigPromise(async (req, res, next) => {
     next();
 });
 
-// ! ...roles --> array destructring so using : includes 
+// ! ...roles --> array destructring for  : includes feature --> 
 exports.customRole = (...roles) => {
+
     return (req, res, next) => {
-        console.log(roles.includes(req.user.role))
+
+        console.log("check role -------" + roles);
+        // console.log(roles.includes(req.user.role))
 
         if (!roles.includes(req.user.role)) {
             return next(new CustomError("You are not allowed for this resouce", 403));

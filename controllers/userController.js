@@ -19,28 +19,29 @@ exports.signup = BigPromise(async (req, res, next) => {
         return next(new CustomError("Name, email and password are required", 400));
     }
 
-    let file = req.files.photo;
+    // let file = req.files.photo;
 
-    result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
-        folder: "users",
-        width: 150,
-        crop: "scale",
-    });
+    // result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
+    //     folder: "users",//folder name 
+    //     width: 150,
+    //     crop: "scale",
+    // });
 
     const user = await User.create({
         name,
         email,
         password,
-        photo: {
-            id: result.public_id,
-            secure_url: result.secure_url,
-        },
+        // photo: {
+        //     id: result.public_id,
+        //     secure_url: result.secure_url,
+        // },
     });
 
     cookieToken(user, res);
 });
 
 exports.signin = BigPromise(async (req, res, next) => {
+    // console.log(req.body)
     const { email, password } = req.body;
 
     // check for presence of email and password
@@ -50,7 +51,7 @@ exports.signin = BigPromise(async (req, res, next) => {
 
     // get user from DB
     const user = await User.findOne({ email }).select("+password");
-
+    console.log(user);
     // if user not found in DB
     if (!user) {
         return next(
@@ -108,7 +109,7 @@ exports.forgotPassword = BigPromise(async (req, res, next) => {
     const myUrl = `${req.protocol}://${req.get(
         "host"
     )}/api/v1/password/reset/${forgotToken}`;
-
+   
     // craft a message
     const message = `Copy paste this link in your URL and hit enter \n\n ${myUrl}`;
 
@@ -177,6 +178,7 @@ exports.resetPassword = BigPromise(async (req, res, next) => {
 exports.getLoggedInUserDetails = BigPromise(async (req, res, next) => {
     //req.user will be added by middleware
     // find user by id
+ 
     const user = await User.findById(req.user.id);
 
     //send response and user data
@@ -217,7 +219,7 @@ exports.updateUserDetails = BigPromise(async (req, res, next) => {
     if (!name) {
         return next(new CustomError("name must required to update", 400));
     }
-    // collect data from body
+    // collect data from body --> if undefined then not updating that field
     const newData = {
         name: req.body.name,
         email: req.body.email,
@@ -327,11 +329,11 @@ exports.adminDeleteOneUser = BigPromise(async (req, res, next) => {
 
     // if user upload photo : destory it
     // if (req.user.photo.photo?.url) {
-        // get image id from user in database
-        const imageId = user.photo.id;
+    // get image id from user in database
+    const imageId = user.photo.id;
 
-        // delete image from cloudinary
-        await cloudinary.v2.uploader.destroy(imageId);
+    // delete image from cloudinary
+    await cloudinary.v2.uploader.destroy(imageId);
 
     // }
 

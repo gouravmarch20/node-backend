@@ -20,11 +20,11 @@ const productSchema = new mongoose.Schema({
         {
             id: {
                 type: String,
-                required: true,
+                // required: true,
             },
             secure_url: {
                 type: String,
-                required: true,
+                // required: true,
             },
         },
     ],
@@ -43,16 +43,17 @@ const productSchema = new mongoose.Schema({
     //this field was updated in order videos later
     stock: {
         type: Number,
-        required: [true, "please add a number in stock"],
+        // required: [true, "please add a number in stock"],
     },
     brand: {
         type: String,
-        required: [true, "please add a brand for clothing"],
+        // required: [true, "please add a brand for clothing"],
     },
     ratings: {
         type: Number,
         default: 0,
     },
+    // !dev role
     numberOfReviews: {
         type: Number,
         default: 0,
@@ -62,26 +63,26 @@ const productSchema = new mongoose.Schema({
             user: {
                 type: mongoose.Schema.ObjectId,
                 ref: "User",
-                required: true,
+                // required: true,
             },
             name: {
                 type: String,
-                required: true,
+                // required: true,
             },
             rating: {
                 type: Number,
-                required: true,
+                // required: true,
             },
             comment: {
                 type: String,
-                required: true,
+                // required: true,
             },
         },
     ],
     user: {
         type: mongoose.Schema.ObjectId,
         ref: "User",
-        required: true,
+        // required: true,
     },
     createdAt: {
         type: Date,
