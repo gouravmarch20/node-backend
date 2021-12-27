@@ -1,0 +1,26 @@
+{
+    "shippingInfo": {
+        "address": "westlife 32.3",
+        "city": "Patel nager",
+        "phoneNo": "489393029",
+        "postalCode": "110003",
+        "state": "Delhi",
+        "country": "India"
+    },
+    "orderItems": [
+        {
+            "name": "Pro Coder tshirts",
+            "quantity": 1,
+            "image": "https://media.gettyimages.com/photos/money-background-picture-id172212205?k=20&m=172212205&s=612x612&w=0&h=KZgtH1u_yRoAKnQznmlypKIh-p5cqlcfrdUAv9yMBOk=",
+            "price": 999,
+            
+            "product": "61c7f3f8945faf383673604b"
+        }
+    ],
+    "paymentInfo": {
+        "id": "testString"
+    },
+    "taxAmount": 40,
+    "shippingAmount": 10,
+    "totalAmount": 100
+}
