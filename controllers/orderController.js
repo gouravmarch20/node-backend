@@ -2,8 +2,7 @@ const Product = require("../models/product");
 const Order = require("../models/order");
 const BigPromise = require("../middlewares/bigPromise");
 const CustomError = require("../utils/coustomError");
-const cloudinary = require("cloudinary");
-const WhereClause = require("../utils/whereClause");
+
 
 exports.createOrder = BigPromise(async (req, res, next) => {
     const {
@@ -46,7 +45,7 @@ exports.getOneOrder = BigPromise(async (req, res, next) => {
         order,
     });
 });
-
+// return logged in user orderItems
 exports.getLoggedInOrders = BigPromise(async (req, res, next) => {
     const order = await Order.find({ user: req.user._id });
 
@@ -59,7 +58,7 @@ exports.getLoggedInOrders = BigPromise(async (req, res, next) => {
         order,
     });
 });
-
+// All orders 
 exports.admingetAllOrders = BigPromise(async (req, res, next) => {
     const orders = await Order.find();
 
@@ -68,7 +67,7 @@ exports.admingetAllOrders = BigPromise(async (req, res, next) => {
         orders,
     });
 });
-
+// !FIXME: Order
 exports.adminUpdateOrder = BigPromise(async (req, res, next) => {
     const order = await Order.findById(req.params.id);
 

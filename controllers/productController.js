@@ -40,10 +40,10 @@ exports.addProduct = BigPromise(async (req, res, next) => {
     });
 });
 
-
+// FIXME:: DRY RUN
 exports.getAllProduct = BigPromise(async (req, res, next) => {
     const resultPerPage = 6;
-    const totalcountProduct = await Product.countDocuments();
+    const totalcountProduct = await Product.countDocuments();// ! total product 
 
     const productsObj = new WhereClause(Product.find(), req.query)
         .search()
@@ -125,7 +125,7 @@ exports.deleteReview = BigPromise(async (req, res, next) => {
   const { productId } = req.query;
 
   const product = await Product.findById(productId);
-
+// ! FIXME: filter working --> RETURN ALL item except match one
   const reviews = product.reviews.filter(
     (rev) => rev.user.toString() === req.user._id.toString()
   );
