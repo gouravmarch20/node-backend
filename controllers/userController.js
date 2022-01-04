@@ -51,7 +51,6 @@ exports.signin = BigPromise(async (req, res, next) => {
 
     // get user from DB
     const user = await User.findOne({ email }).select("+password");
-    console.log(user);
     // if user not found in DB
     if (!user) {
         return next(
@@ -109,7 +108,7 @@ exports.forgotPassword = BigPromise(async (req, res, next) => {
     const myUrl = `${req.protocol}://${req.get(
         "host"
     )}/api/v1/password/reset/${forgotToken}`;
-   
+
     // craft a message
     const message = `Copy paste this link in your URL and hit enter \n\n ${myUrl}`;
 
@@ -178,7 +177,7 @@ exports.resetPassword = BigPromise(async (req, res, next) => {
 exports.getLoggedInUserDetails = BigPromise(async (req, res, next) => {
     //req.user will be added by middleware
     // find user by id
- 
+
     const user = await User.findById(req.user.id);
 
     //send response and user data
@@ -322,20 +321,20 @@ exports.adminDeleteOneUser = BigPromise(async (req, res, next) => {
     // get user from url
     const user = await User.findById(req.params.id);
 
+    console.log(user)
     if (!user) {
         return next(new CustomError("No Such user found", 401));
     }
-    console.log(req.user.photo.secure_url)
 
     // if user upload photo : destory it
-    // if (req.user.photo.photo?.url) {
-    // get image id from user in database
-    const imageId = user.photo.id;
+    if (req.user.photo.photo?.url) {
+        // get image id from user in database
+        const imageId = user.photo.id
 
-    // delete image from cloudinary
-    await cloudinary.v2.uploader.destroy(imageId);
+        // delete image from cloudinary
+        await cloudinary.v2.uploader.destroy(imageId);
 
-    // }
+    }
 
     // remove user from databse
     await user.remove();

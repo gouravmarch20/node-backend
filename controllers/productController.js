@@ -5,80 +5,84 @@ const cloudinary = require("cloudinary");
 const WhereClause = require("../utils/whereClause");
 
 exports.addProduct = BigPromise(async (req, res, next) => {
-    // images
+  console.log("add product")
 
-    let imageArray = [];
+  // images
 
-    // if (!req.files) {
-    //     return next(new CustomError("images are required", 401));
-    // }
 
-    // if (req.files) {
-    //     for (let index = 0; index < req.files.photos.length; index++) {
-    //         let result = await cloudinary.v2.uploader.upload(
-    //             req.files.photos[index].tempFilePath,
-    //             {
-    //                 folder: "products",
-    //             }
-    //         );
+  let imageArray = [];
 
-    //         imageArray.push({
-    //             id: result.public_id,
-    //             secure_url: result.secure_url,
-    //         });
-    //     }
-    // }
+  if (!req.files) {
+    return next(new CustomError("images are required", 401));
+  }
 
-    // req.body.photos = imageArray;
-    // req.body.user = req.user.id;
+  if (req.files) {
+    for (let index = 0; index < req.files.photos.length; index++) {
+      let result = await cloudinary.v2.uploader.upload(
+        req.files.photos[index].tempFilePath,
+        {
+          folder: "products",
+        }
+      );
 
-    const product = await Product.create(req.body);
+      imageArray.push({
+        id: result.public_id,
+        secure_url: result.secure_url,
+      });
+    }
+  }
 
-    res.status(200).json({
-        success: true,
-        product,
-    });
+  req.body.photos = imageArray;
+  req.body.user = req.user.id;
+  console.log("photo task done")
+  const product = await Product.create(req.body);
+
+  res.status(200).json({
+    success: true,
+    product,
+  });
 });
 
 // FIXME:: DRY RUN
 exports.getAllProduct = BigPromise(async (req, res, next) => {
-    const resultPerPage = 6;
-    const totalcountProduct = await Product.countDocuments();// ! total product 
+  const resultPerPage = 6;
+  const totalcountProduct = await Product.countDocuments();// ! total product 
 
-    const productsObj = new WhereClause(Product.find(), req.query)
-        .search()
-        .filter();
+  const productsObj = new WhereClause(Product.find(), req.query)
+    .search()
+    .filter();
 
-    let products = await productsObj.base;
-    const filteredProductNumber = products.length;
+  let products = await productsObj.base;
+  const filteredProductNumber = products.length;
 
-    //products.limit().skip()
+  //products.limit().skip()
 
-    productsObj.pager(resultPerPage);
-    products = await productsObj.base.clone();
+  productsObj.pager(resultPerPage);
+  products = await productsObj.base.clone();
 
-    res.status(200).json({
-        success: true,
-        products,
-        filteredProductNumber,
-        totalcountProduct,
-    });
+  res.status(200).json({
+    success: true,
+    products,
+    filteredProductNumber,
+    totalcountProduct,
+  });
 });
 
 exports.getOneProduct = BigPromise(async (req, res, next) => {
-    const product = await Product.findById(req.params.id);
+  const product = await Product.findById(req.params.id);
 
-    if (!product) {
-        return next(new CustomError("No product found with this id", 401));
-    }
-    res.status(200).json({
-        success: true,
-        product,
-    });
+  if (!product) {
+    return next(new CustomError("No product found with this id", 401));
+  }
+  res.status(200).json({
+    success: true,
+    product,
+  });
 });
 
 
 exports.addReview = BigPromise(async (req, res, next) => {
+  console.log("add review")
   const { rating, comment, productId } = req.body;
 
   const review = {
@@ -125,7 +129,7 @@ exports.deleteReview = BigPromise(async (req, res, next) => {
   const { productId } = req.query;
 
   const product = await Product.findById(productId);
-// ! FIXME: filter working --> RETURN ALL item except match one
+  // ! FIXME: filter working --> RETURN ALL item except match one
   const reviews = product.reviews.filter(
     (rev) => rev.user.toString() === req.user._id.toString()
   );
@@ -170,76 +174,76 @@ exports.getOnlyReviewsForOneProduct = BigPromise(async (req, res, next) => {
 
 // admin only controllers
 exports.adminGetAllProduct = BigPromise(async (req, res, next) => {
-    const products = await Product.find();
+  const products = await Product.find();
 
-    res.status(200).json({
-        success: true,
-        products,
-    });
+  res.status(200).json({
+    success: true,
+    products,
+  });
 });
 
 
 exports.adminUpdateOneProduct = BigPromise(async (req, res, next) => {
-    let product = await Product.findById(req.params.id);
+  let product = await Product.findById(req.params.id);
 
-    if (!product) {
-        return next(new CustomError("No product found with this id", 401));
-    }
-    let imagesArray = [];
+  if (!product) {
+    return next(new CustomError("No product found with this id", 401));
+  }
+  let imagesArray = [];
 
-    if (req.files) {
-        //destroy the existing image
-        for (let index = 0; index < product.photos.length; index++) {
-            const res = await cloudinary.v2.uploader.destroy(
-                product.photos[index].id
-            );
-        }
-
-        for (let index = 0; index < req.files.photos.length; index++) {
-            let result = await cloudinary.v2.uploader.upload(
-                req.files.photos[index].tempFilePath,
-                {
-                    folder: "products", //folder name -> .env
-                }
-            );
-
-            imagesArray.push({
-                id: result.public_id,
-                secure_url: result.secure_url,
-            });
-        }
+  if (req.files) {
+    //destroy the existing image
+    for (let index = 0; index < product.photos.length; index++) {
+      const res = await cloudinary.v2.uploader.destroy(
+        product.photos[index].id
+      );
     }
 
-    req.body.photos = imagesArray;
+    for (let index = 0; index < req.files.photos.length; index++) {
+      let result = await cloudinary.v2.uploader.upload(
+        req.files.photos[index].tempFilePath,
+        {
+          folder: "products", //folder name -> .env
+        }
+      );
 
-    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-        useFindAndModify: false,
-    });
+      imagesArray.push({
+        id: result.public_id,
+        secure_url: result.secure_url,
+      });
+    }
+  }
 
-    res.status(200).json({
-        success: true,
-        product,
-    });
+  req.body.photos = imagesArray;
+
+  product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  res.status(200).json({
+    success: true,
+    product,
+  });
 });
 
 exports.adminDeleteOneProduct = BigPromise(async (req, res, next) => {
-    const product = await Product.findById(req.params.id);
+  const product = await Product.findById(req.params.id);
 
-    if (!product) {
-        return next(new CustomError("No product found with this id", 401));
-    }
+  if (!product) {
+    return next(new CustomError("No product found with this id", 401));
+  }
 
-    //destroy the existing image
-    for (let index = 0; index < product.photos.length; index++) {
-        const res = await cloudinary.v2.uploader.destroy(product.photos[index].id);
-    }
+  //destroy the existing image
+  for (let index = 0; index < product.photos.length; index++) {
+    const res = await cloudinary.v2.uploader.destroy(product.photos[index].id);
+  }
 
-    await product.remove();
+  await product.remove();
 
-    res.status(200).json({
-        success: true,
-        message: "Product was deleted !",
-    });
+  res.status(200).json({
+    success: true,
+    message: "Product was deleted !",
+  });
 });

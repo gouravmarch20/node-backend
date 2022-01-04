@@ -38,11 +38,11 @@ components:
       scheme: bearer
 
 paths:
-  /dummy:
+  /:
     get:
       tags:
         - Home
-      summary: returns a greet message from LCO
+      summary: returns a greet message from tshirt api backend
       responses:
         200:
           description: All good success
@@ -121,11 +121,11 @@ paths:
         500:
           description: internal server error
 
-  /login:
+  /signin:
     post:
       tags:
         - User
-      summary: login a new user. required files are -  email and password. Also adds httpOnly cookie in browser. It sends token in response too.
+      summary: signin a new user. required files are -  email and password. Also adds httpOnly cookie in browser. It sends token in response too.
       requestBody:
         content:
           application/json:
@@ -176,11 +176,11 @@ paths:
         500:
           description: internal server error
 
-  /logout:
+  /signout:
     get:
       tags:
         - User
-      summary: get request to logout the user. Also removes httpOnly cookies
+      summary: get request to signout the user. Also removes httpOnly cookies
       responses:
         200:
           description: All good success
@@ -203,7 +203,7 @@ paths:
     post:
       tags:
         - User
-      summary: sends an email with link to forgot password. Contains the token for user validation. Public hosted version will not send email to your account. Use your own SMTP details to access this feature on local project
+      summary: sends an email with link to forgot password. Contains the token for user validation. Token check by mailtrap . user click on url then they redirected to password/reset/:token
       requestBody:
         content:
           application/json:
@@ -235,7 +235,7 @@ paths:
     post:
       tags:
         - User
-      summary: Allows user to reset password, validated based on token. send password and confirm password fields
+      summary: Allows user to reset password, validated based on token. send password and confirm password fields required .
       parameters:
         - name: token
           in: path
@@ -517,7 +517,7 @@ paths:
     put:
       tags:
         - Admin
-      summary: If user is admin, he can update mentioned fields in user
+      summary: not working to learn formData accept by fro
       parameters:
         - name: id
           in: path
@@ -577,49 +577,6 @@ paths:
                 properties:
                   success:
                     type: boolean
-
-        400:
-          description: Bad request
-        500:
-          description: internal server error
-
-  /manager/users:
-    get:
-      tags:
-        - Manager
-      summary: If manager, response will get array of all users whose role is user
-      requestBody:
-
-      responses:
-        200:
-          description: All good success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    user:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                        email:
-                          type: string
-                        role:
-                          type: string
-                        photo:
-                          type: object
-                          properties:
-                            id:
-                              type: string
-                            secure_url:
-                              type: string
-                        _id:
-                          type: string
-                        createdAt:
-                          type: string
 
         400:
           description: Bad request
@@ -846,7 +803,7 @@ paths:
     post:
       tags:
         - Admin
-      summary: If admin, Add a product
+      summary: not working if admin, Add a product
       parameters:
 
       requestBody:
@@ -1092,7 +1049,7 @@ paths:
     get:
       tags:
         - Product
-      summary: A simple get request will give you all reviews for given products
+      summary: not wrorking ,  A simple get request will give you all reviews for given products
       parameters:
         - name: id
           in: query
@@ -1137,7 +1094,7 @@ paths:
     put:
       tags:
         - Product
-      summary: A logged in user can post a review on any product. If review is already posted, it will just update the existing review
+      summary: not working , A logged in user can post a review on any product. If review is already posted, it will just update the existing review
       parameters:
 
       requestBody:
@@ -1192,7 +1149,7 @@ paths:
     delete:
       tags:
         - Product
-      summary: Delete the review of logged in user on given product id.
+      summary: not working Delete the review of logged in user on given product id.
       parameters:
         - name: productId
           in: query
@@ -1254,7 +1211,7 @@ paths:
     post:
       tags:
         - Order
-      summary: create a new order with given details
+      summary: not working create a new order with given details
       parameters:
 
       requestBody:
@@ -1754,29 +1711,6 @@ paths:
         500:
           description: internal server error
 
-  /stripekey:
-    get:
-      tags:
-        - Payment
-      summary: gets you the public stripe key
-      requestBody:
-
-      responses:
-        200:
-          description: All good success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  stripekey:
-                    type: string
-
-        400:
-          description: Bad request
-        500:
-          description: internal server error
-
   /razorpaykey:
     get:
       tags:
@@ -1793,42 +1727,6 @@ paths:
                 type: object
                 properties:
                   razorpaykey:
-                    type: string
-
-        400:
-          description: Bad request
-        500:
-          description: internal server error
-
-  /capturestripe:
-    post:
-      tags:
-        - Payment
-      summary: send amount in number. Send amount after multiplying by 100. Also request from swagger UI are not proper as to capture payment we need to send dummy card details
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              required:
-                - amount
-              properties:
-                amount:
-                  type: number
-
-      responses:
-        200:
-          description: All good success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  amount:
-                    type: number
-                  client_secret:
                     type: string
 
         400:

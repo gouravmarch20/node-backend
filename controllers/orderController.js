@@ -5,6 +5,7 @@ const CustomError = require("../utils/coustomError");
 
 
 exports.createOrder = BigPromise(async (req, res, next) => {
+    console.log("create order hit")
     const {
         shippingInfo,
         orderItems,
